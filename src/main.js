@@ -4091,13 +4091,16 @@ function ImpressaoModal({
 
 // ─── APP ROOT ─────────────────────────────────────────────────────────────────
 
-function MaterialModal({obras,setMateriais,spAtivo,onClose}){
+function MaterialModal({obras,setMateriais,spAtivo,onClose,materiais}){
   var hoje=new Date().toISOString().slice(0,10);
   var empty=function(){return {obraId:"",descricao:"",fornecedor:"",quantidade:1,unidade:"Un",custoUnitario:0,custoTotal:0,pvpUnitario:0,pvpTotal:0,data:hoje,notas:""};};
   var _s=React.useState(empty()); var form=_s[0]; var setForm=_s[1];
   var _l=React.useState(false); var loading=_l[0]; var setLoading=_l[1];
   var set=function(k,v){setForm(function(p){var n=Object.assign({},p);n[k]=v;var q=parseFloat(n.quantidade)||0,c=parseFloat(n.custoUnitario)||0;n.custoTotal=Math.round(q*c*100)/100;n.pvpUnitario=Math.round(c*1.3*100)/100;n.pvpTotal=Math.round(q*n.pvpUnitario*100)/100;return n;});};
   var UNI=["Un","M2","M","Kg","Lt","Saco","Rolo","Cx","P\u00e7"];
+  var _mats=materiais||[];
+  var _dl=[...new Set(_mats.map(function(x){return x.descricao;}).filter(Boolean))].sort();
+  var _fl=[...new Set(_mats.map(function(x){return x.fornecedor;}).filter(Boolean))].sort();
   var save=async function(){
     if(!form.descricao)return alert("Preenche a descri\u00e7\u00e3o do material.");
     setLoading(true);
@@ -4122,10 +4125,10 @@ function MaterialModal({obras,setMateriais,spAtivo,onClose}){
         obras.map(function(o){return CE("option",{key:o.spId||o.id,value:String(o.spId||o.id)},o.titulo||o.sinistro||"Sem t\u00edtulo");})
       )),
       CE("div",{style:{display:"grid",gridTemplateColumns:"2fr 1fr",gap:12}},
-        Fld("Descri\u00e7\u00e3o do Material *",CE(TxtInput,{type:"text",value:form.descricao,onChange:function(e){set("descricao",e.target.value);},placeholder:"Ex: Argamassa, Tinta, Azulejo..."})),
+        Fld("Descri\u00e7\u00e3o do Material *",CE("div",{style:{position:"relative"}},CE("datalist",{id:"ml-desc"},_dl.map(function(d){return CE("option",{key:d,value:d});})),CE(TxtInput,{type:"text",list:"ml-desc",value:form.descricao,onChange:function(e){set("descricao",e.target.value);},placeholder:"Ex: Argamassa, Tinta, Azulejo..."}))),
         Fld("Data",CE(TxtInput,{type:"date",value:form.data,onChange:function(e){set("data",e.target.value);}}))
       ),
-      Fld("Fornecedor",CE(TxtInput,{type:"text",value:form.fornecedor,onChange:function(e){set("fornecedor",e.target.value);},placeholder:"Nome do fornecedor"})),
+      Fld("Fornecedor",CE("div",{style:{position:"relative"}},CE("datalist",{id:"ml-forn"},_fl.map(function(f){return CE("option",{key:f,value:f});})),CE(TxtInput,{type:"text",list:"ml-forn",value:form.fornecedor,onChange:function(e){set("fornecedor",e.target.value);},placeholder:"Nome do fornecedor"}))),
       CE("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr 1fr 1fr",gap:10}},
         Fld("Quantidade",CE(TxtInput,{type:"number",min:"0",step:"0.01",value:form.quantidade,onChange:function(e){set("quantidade",e.target.value);}})),
         Fld("Unidade",CE(Sel,{value:form.unidade,onChange:function(e){set("unidade",e.target.value);}},UNI.map(function(u){return CE("option",{key:u,value:u},u);}))),
@@ -4584,6 +4587,7 @@ window.GestaoObrasApp = function App() {
   }), materialModal && /*#__PURE__*/React.createElement(MaterialModal, {
     obras: obras,
     setMateriais: setMateriais,
+    materiais: materiais,
     spAtivo: spAtivo,
     onClose: function(){ setMaterialModal(false); }
   }));
