@@ -4108,6 +4108,7 @@ function MaterialModal({obras,setMateriais,spAtivo,onClose,materiais,editando}){
   var _s=React.useState(editando?Object.assign({},editando):empty()); var form=_s[0]; var setForm=_s[1];
   var _l=React.useState(false); var loading=_l[0]; var setLoading=_l[1];
   var _em=React.useState(null); var editandoMat=_em[0]; var setEditandoMat=_em[1];
+  var _em=React.useState(null); var editandoMat=_em[0]; var setEditandoMat=_em[1];
   var set=function(k,v){setForm(function(p){var n=Object.assign({},p);n[k]=v;var q=parseFloat(n.quantidade)||0,c=parseFloat(n.custoUnitario)||0;n.custoTotal=Math.round(q*c*100)/100;n.pvpUnitario=Math.round(c*1.3*100)/100;n.pvpTotal=Math.round(q*n.pvpUnitario*100)/100;return n;});};
   var UNI=["Un","M2","M","Kg","Lt","Saco","Rolo","Cx","P\u00e7"];
   var _mats=materiais||[];
