@@ -477,6 +477,12 @@ async function spCriarMaterial(mat, obras) {
   });
   return spItemParaMaterial(res);
 }
+async function spActualizarMaterial(mat,obras) {
+  var siteId=await resolverSiteId();
+  var listId=await resolverListId(SP_CONFIG.listaMateriais);
+  await graphPatch("/sites/"+siteId+"/lists/"+listId+"/items/"+mat.spId+"/fields",materialParaSPFields(mat,obras));
+  return mat;
+}
 async function spApagarMaterial(spId) {
   const siteId = await resolverSiteId();
   const listId = await resolverListId(SP_CONFIG.listaMateriais);
@@ -1729,7 +1735,7 @@ function ListaView({
   const custoObra = id => registos.filter(r => r.obraId === id).reduce((s, r) => s + r.horas * CUSTO_HORA[r.funcionario], 0);
   const horasObra = id => registos.filter(r => r.obraId === id).reduce((s, r) => s + r.horas, 0);
   const filtradas = obras.filter(o => filtro === "todos" || o.estado === filtro).filter(o => filtroTipo === "todos" || o.tipo === filtroTipo).filter(o => filtroEsp === "todas" || (o.especialidades || []).some(e => e.id === filtroEsp));
-  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+  return /*#__PURE__*/React.createElement("div", null, editandoMat && /*#__PURE__*/React.createElement(MaterialModal, {obras:obras,setMateriais:setMateriais,spAtivo:spAtivo,materiais:materiais,editando:editandoMat,onClose:function(){setEditandoMat(null);}}), /*#__PURE__*/React.createElement("div", {
     style: {
       display: "flex",
       alignItems: "flex-start",
@@ -3435,7 +3441,12 @@ function MateriaisView({
         padding: 4
       },
       title: "Apagar"
-    }, "\uD83D\uDDD1")));
+    }, "\uD83D\uDDD1"),
+    /*#__PURE__*/React.createElement("button", {
+      onClick: function(){setEditandoMat(m);},
+      style:{background:"transparent",border:"none",cursor:"pointer",color:"#94a3b8",fontSize:13,padding:4},
+      title:"Editar"
+    }, "\u270F\uFE0F")));
   })), /*#__PURE__*/React.createElement("tfoot", null, /*#__PURE__*/React.createElement("tr", {
     style: {
       borderTop: "2px solid #1e293b"
@@ -4091,11 +4102,12 @@ function ImpressaoModal({
 
 // ─── APP ROOT ─────────────────────────────────────────────────────────────────
 
-function MaterialModal({obras,setMateriais,spAtivo,onClose,materiais}){
+function MaterialModal({obras,setMateriais,spAtivo,onClose,materiais,editando}){
   var hoje=new Date().toISOString().slice(0,10);
   var empty=function(){return {obraId:"",descricao:"",fornecedor:"",quantidade:1,unidade:"Un",custoUnitario:0,custoTotal:0,pvpUnitario:0,pvpTotal:0,data:hoje,notas:""};};
-  var _s=React.useState(empty()); var form=_s[0]; var setForm=_s[1];
+  var _s=React.useState(editando?Object.assign({},editando):empty()); var form=_s[0]; var setForm=_s[1];
   var _l=React.useState(false); var loading=_l[0]; var setLoading=_l[1];
+  var _em=React.useState(null); var editandoMat=_em[0]; var setEditandoMat=_em[1];
   var set=function(k,v){setForm(function(p){var n=Object.assign({},p);n[k]=v;var q=parseFloat(n.quantidade)||0,c=parseFloat(n.custoUnitario)||0;n.custoTotal=Math.round(q*c*100)/100;n.pvpUnitario=Math.round(c*1.3*100)/100;n.pvpTotal=Math.round(q*n.pvpUnitario*100)/100;return n;});};
   var UNI=["Un","M2","M","Kg","Lt","Saco","Rolo","Cx","P\u00e7"];
   var _mats=materiais||[];
@@ -4105,8 +4117,14 @@ function MaterialModal({obras,setMateriais,spAtivo,onClose,materiais}){
     if(!form.descricao)return alert("Preenche a descri\u00e7\u00e3o do material.");
     setLoading(true);
     try{
-      if(spAtivo){var novo=await spCriarMaterial(form,obras);setMateriais(function(p){return [...p,novo];});}
-      else{setMateriais(function(p){return [...p,Object.assign({},form,{id:Date.now(),spId:null})];});}
+      if(editando&&editando.id){
+        var atualizado=Object.assign({},editando,form);
+        if(spAtivo&&editando.spId){await spActualizarMaterial(atualizado,obras);}
+        setMateriais(function(p){return p.map(function(m){return m.id===editando.id?atualizado:m;});});
+      } else {
+        if(spAtivo){var novo=await spCriarMaterial(form,obras);setMateriais(function(p){return [...p,novo];});}
+        else{setMateriais(function(p){return [...p,Object.assign({},form,{id:Date.now(),spId:null})];});}
+      }
       onClose();
     }catch(e){alert("Erro: "+e.message);}
     setLoading(false);
