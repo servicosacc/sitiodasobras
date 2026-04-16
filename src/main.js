@@ -1086,8 +1086,8 @@ function ObraModal({
       padding: "8px 12px",
       borderRadius: 7,
       background: "rgba(189,77,42,0.15)",
-      border: "1px solid rgba(189,77,42,0.3)",
-      color: "#bd4d2a",
+      border: "none",
+      color: "#ffffff",
       cursor: "pointer",
       fontSize: 12,
       fontFamily: "inherit",
@@ -2940,7 +2940,7 @@ function MateriaisView({
   }, /*#__PURE__*/React.createElement("div", {
     style: {
       fontSize: 10,
-      color: "#bd4d2a",
+      color: "#ffffff",
       fontWeight: 700,
       textTransform: "uppercase",
       letterSpacing: 1
@@ -2949,7 +2949,7 @@ function MateriaisView({
     style: {
       fontSize: 26,
       fontWeight: 800,
-      color: "#bd4d2a",
+      color: "#ffffff",
       fontFamily: "'Sora',sans-serif"
     }
   }, materiais.reduce((s, m) => s + (m.custoTotal || 0), 0).toFixed(0), "\u20AC"))), /*#__PURE__*/React.createElement("div", {
@@ -2964,7 +2964,7 @@ function MateriaisView({
     style: {
       fontSize: 12,
       fontWeight: 700,
-      color: "#bd4d2a",
+      color: "#ffffff",
       textTransform: "uppercase",
       letterSpacing: 1,
       marginBottom: 14
@@ -3164,7 +3164,7 @@ function MateriaisView({
       borderRadius: 8,
       fontSize: 14,
       fontWeight: 700,
-      color: "#bd4d2a"
+      color: "#ffffff"
     }
   }, (form.pvpTotal || 0).toFixed(2), "\u20AC"))), /*#__PURE__*/React.createElement("div", {
     style: {
@@ -3268,7 +3268,7 @@ function MateriaisView({
       style: {
         fontSize: 12,
         fontWeight: 700,
-        color: "#bd4d2a",
+        color: "#ffffff",
         minWidth: 70,
         textAlign: "right"
       }
