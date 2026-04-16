@@ -431,7 +431,7 @@ function materialParaSPFields(mat, obras) {
     CustoTotal: Math.round(qtd * cu * 100) / 100,
     PVPUnitario: pvpu,
     PVPTotal: Math.round(qtd * pvpu * 100) / 100,
-    DescricaoArtigo: mat.descricao || "",
+    
     Unidade: mat.unidade || "Un"
   };
   if (mat.notas) fields.Notas = mat.notas;
