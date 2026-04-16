@@ -4295,8 +4295,8 @@ window.GestaoObrasApp = function App() {
     style: {
       width: 220,
       minHeight: "100vh",
-      background: "#1c0f09",
-      borderRight: "1px solid #2d1a12",
+      background: "#13192a",
+      borderRight: "1px solid #1c2336",
       display: "flex",
       flexDirection: "column",
       position: "fixed",
@@ -4307,7 +4307,7 @@ window.GestaoObrasApp = function App() {
   }, /*#__PURE__*/React.createElement("div", {
     style: {
       padding: "20px 18px 18px",
-      borderBottom: "1px solid rgba(189,77,42,0.2)"
+      borderBottom: "1px solid #1c2336"
     }
   }, /*#__PURE__*/React.createElement("img", {
     src: LOGO_B64,
@@ -4343,9 +4343,9 @@ window.GestaoObrasApp = function App() {
       marginBottom: 3,
       textAlign: "left",
       fontFamily: "inherit",
-      background: view === id ? "rgba(189,77,42,0.15)" : "transparent",
-      color: view === id ? "#e8795a" : "#94a3b8",
-      borderLeft: view === id ? "2px solid #bd4d2a" : "2px solid transparent"
+      background: view === id ? "rgba(255,255,255,0.07)" : "transparent",
+      color: view === id ? "#ffffff" : "#6e849e",
+      borderLeft: view === id ? "3px solid #bd4d2a" : "2px solid transparent"
     }
   }, /*#__PURE__*/React.createElement("span", {
     style: {
@@ -4365,7 +4365,7 @@ window.GestaoObrasApp = function App() {
       width: "100%",
       padding: "10px 14px",
       borderRadius: 8,
-      background: "rgba(189,77,42,0.12)",
+      background: "#bd4d2a",
       border: "1px solid rgba(189,77,42,0.3)",
       color: "#bd4d2a",
       cursor: "pointer",
