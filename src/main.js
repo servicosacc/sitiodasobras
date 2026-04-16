@@ -271,7 +271,7 @@ async function graphPost(url, body) {
     },
     body: JSON.stringify(body)
   });
-  if (!res.ok) throw new Error(`Graph POST falhou: ${res.status} ${url}`);
+  if (!res.ok) { const e = await res.json().catch(()=>({})); throw new Error(`Graph POST falhou: ${res.status} — ${e?.error?.message || e?.error?.code || url}`); }
   return res.json();
 }
 async function graphPatch(url, body) {
