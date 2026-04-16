@@ -2,6 +2,7 @@ import * as msal from '@azure/msal-browser';
 import React, { useState, useMemo } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
+window.msal = msal; // compatibilidade com codigo existente
 
 var _extends = Object.assign || function() { var t = arguments[0]; for (var i = 1; i < arguments.length; i++) { var s = arguments[i]; for (var k in s) Object.prototype.hasOwnProperty.call(s,k) && (t[k]=s[k]); } return t; };
 
