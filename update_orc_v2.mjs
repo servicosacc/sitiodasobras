@@ -257,12 +257,14 @@ replaceFunction('OrcamentoEditor', `function OrcamentoEditor({orcamento, artigos
           : CE("div",{style:{flex:1,display:"flex",flexDirection:"column",overflow:"hidden"}},
               CE("div",{style:{padding:"14px 20px",background:"#111827",borderBottom:"1px solid #1e293b",flexShrink:0}},
                 CE("div",{style:{fontSize:13,fontWeight:700,color:"#e2e8f0",marginBottom:10}},selLabel),
-                sel.tipo==='frsec'&&selFracao&&CE("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8,marginBottom:10}},
-                  CE("div",null,lbl("Nome sec\u00e7\u00e3o"),CE(TxtInput,{type:"text",value:selSeccao?selSeccao.nome:"",onChange:function(e){updSecFracao(sel.fracaoId,sel.seccaoId,{nome:e.target.value});}})),
-                  CE("div",null,lbl("Propriet\u00e1rio"),CE(TxtInput,{type:"text",value:selFracao.proprietario,onChange:function(e){updFracao(sel.fracaoId,{proprietario:e.target.value});}})),
-                  CE("div",null,lbl("Contacto"),CE(TxtInput,{type:"text",value:selFracao.contacto,onChange:function(e){updFracao(sel.fracaoId,{contacto:e.target.value});}}))
+                sel.tipo==='frsec'&&selFracao&&CE("div",{style:{marginBottom:10}},
+                  CE("div",{style:{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8,marginBottom:6}},
+                    CE("div",null,lbl("Nome fra\u00e7\u00e3o"),CE(TxtInput,{type:"text",value:selFracao.nome,onChange:function(e){updFracao(sel.fracaoId,{nome:e.target.value});}})),
+                    CE("div",null,lbl("Propriet\u00e1rio (fra\u00e7\u00e3o)"),CE(TxtInput,{type:"text",value:selFracao.proprietario,onChange:function(e){updFracao(sel.fracaoId,{proprietario:e.target.value});}})),
+                    CE("div",null,lbl("Contacto"),CE(TxtInput,{type:"text",value:selFracao.contacto,onChange:function(e){updFracao(sel.fracaoId,{contacto:e.target.value});}}))),
+                  CE("div",null,lbl("Nome sec\u00e7\u00e3o"),CE(TxtInput,{type:"text",value:selSeccao?selSeccao.nome:"",onChange:function(e){updSecFracao(sel.fracaoId,sel.seccaoId,{nome:e.target.value});}}))
                 ),
-                sel.tipo==='seccao'&&selSeccao&&CE("div",{style:{marginBottom:10}},lbl("Nome"),CE(TxtInput,{type:"text",value:selSeccao.nome,onChange:function(e){updSeccao(sel.seccaoId,{nome:e.target.value});}})),
+                sel.tipo==='seccao'&&selSeccao&&CE("div",{style:{marginBottom:10}},lbl("Nome sec\u00e7\u00e3o"),CE(TxtInput,{type:"text",value:selSeccao.nome,onChange:function(e){updSeccao(sel.seccaoId,{nome:e.target.value});}})),
                 CE("div",{style:{display:"flex",gap:8}},
                   CE(Btn,{variant:"primary",onClick:function(){setShowPickArt(true);}},"+  Artigo da Base"),
                   CE(Btn,{variant:"ghost",onClick:function(){addLinha(null);}},"+  Manual")
