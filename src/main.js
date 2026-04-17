@@ -1735,7 +1735,7 @@ function ListaView({
   const custoObra = id => registos.filter(r => r.obraId === id).reduce((s, r) => s + r.horas * CUSTO_HORA[r.funcionario], 0);
   const horasObra = id => registos.filter(r => r.obraId === id).reduce((s, r) => s + r.horas, 0);
   const filtradas = obras.filter(o => filtro === "todos" || o.estado === filtro).filter(o => filtroTipo === "todos" || o.tipo === filtroTipo).filter(o => filtroEsp === "todas" || (o.especialidades || []).some(e => e.id === filtroEsp));
-  return /*#__PURE__*/React.createElement("div", null, editandoMat && /*#__PURE__*/React.createElement(MaterialModal, {obras:obras,setMateriais:setMateriais,spAtivo:spAtivo,materiais:materiais,editando:editandoMat,onClose:function(){setEditandoMat(null);}}), /*#__PURE__*/React.createElement("div", {
+  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
     style: {
       display: "flex",
       alignItems: "flex-start",
@@ -2189,7 +2189,6 @@ function RegistosView({
 }) {
   const [filtroFunc, setFiltroFunc] = useState("todos");
   const [filtroObra, setFiltroObra] = useState("todas");
-  const [editandoMat, setEditandoMat] = useState(null);
   const filtered = registos.filter(r => filtroFunc === "todos" || r.funcionario === filtroFunc).filter(r => filtroObra === "todas" || r.obraId === parseInt(filtroObra)).sort((a, b) => b.data.localeCompare(a.data));
   const totalH = filtered.reduce((s, r) => s + r.horas, 0);
   const totalC = filtered.reduce((s, r) => s + r.horas * CUSTO_HORA[r.funcionario], 0);
@@ -2840,7 +2839,8 @@ function MateriaisView({
   obras,
   materiais,
   setMateriais,
-  spAtivo
+  spAtivo,
+  onEditar
 }) {
   const hoje = new Date().toISOString().slice(0, 10);
   const emptyMat = () => ({
@@ -3444,7 +3444,7 @@ function MateriaisView({
       title: "Apagar"
     }, "\uD83D\uDDD1"),
     /*#__PURE__*/React.createElement("button", {
-      onClick: function(){setEditandoMat(m);},
+      onClick: function(){onEditar&&onEditar(m);},
       style:{background:"transparent",border:"none",cursor:"pointer",color:"#94a3b8",fontSize:13,padding:4},
       title:"Editar"
     }, "\u270F\uFE0F")));
@@ -4174,6 +4174,7 @@ window.GestaoObrasApp = function App() {
   const [obraModal, setObraModal] = useState(undefined);
   const [registoModal, setRegistoModal] = useState(null);
   const [materialModal, setMaterialModal] = useState(false);
+  const [editandoMat, setEditandoMat] = useState(null);
   const [obraPreSel, setObraPreSel] = useState(null);
   const [impressaoModal, setImpressaoModal] = useState(null);
   const [spStatus, setSpStatus] = useState("idle");
@@ -4579,7 +4580,8 @@ window.GestaoObrasApp = function App() {
     obras: obras,
     materiais: materiais,
     setMateriais: setMateriais,
-    spAtivo: spAtivo
+    spAtivo: spAtivo,
+    onEditar: setEditandoMat
   }), view === "analise" && /*#__PURE__*/React.createElement(AnaliseView, {
     obras: obras,
     registos: registos,
@@ -4608,6 +4610,13 @@ window.GestaoObrasApp = function App() {
     materiais: materiais,
     spAtivo: spAtivo,
     onClose: function(){ setMaterialModal(false); }
+  }), editandoMat && /*#__PURE__*/React.createElement(MaterialModal, {
+    obras: obras,
+    setMateriais: setMateriais,
+    materiais: materiais,
+    spAtivo: spAtivo,
+    editando: editandoMat,
+    onClose: function(){ setEditandoMat(null); }
   }));
 };
 
